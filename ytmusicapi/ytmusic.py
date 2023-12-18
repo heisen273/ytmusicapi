@@ -92,7 +92,9 @@ class YTMusic(BrowsingMixin, SearchMixin, WatchMixin, ExploreMixin, LibraryMixin
             self.input_dict['filepath'] = self.auth
             self.is_oauth_auth = is_oauth(self.input_dict)
 
-        self.headers = prepare_headers(self._session, proxies, self.input_dict)
+        self.headers, latestToken = prepare_headers(self._session, proxies, self.input_dict)
+        self.input_dict = latestToken or self.input_dict
+        
 
         if 'x-goog-visitor-id' not in self.headers:
             self.headers.update(get_visitor_id(self._send_get_request))
@@ -135,7 +137,8 @@ class YTMusic(BrowsingMixin, SearchMixin, WatchMixin, ExploreMixin, LibraryMixin
     def _send_request(self, endpoint: str, body: Dict, additionalParams: str = "") -> Dict:
 
         if self.is_oauth_auth:
-            self.headers = prepare_headers(self._session, self.proxies, self.input_dict)
+            self.headers, latestToken = prepare_headers(self._session, self.proxies, self.input_dict)
+            self.input_dict = latestToken or self.input_dict
         body.update(self.context)
         params = YTM_PARAMS
         if self.is_browser_auth:
