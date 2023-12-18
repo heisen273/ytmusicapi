@@ -99,4 +99,4 @@ class YTMusicOAuth:
         headers["Authorization"] = f"{token['token_type']} {token['access_token']}"
         headers["Content-Type"] = "application/json"
         headers["X-Goog-Request-Time"] = str(int(time.time()))
-        return headers
+        return headers, token
