@@ -1,3 +1,4 @@
+from __future__ import annotations
 import json
 import os
 from typing import Dict, Optional
@@ -24,12 +25,13 @@ def prepare_headers(
     session: requests.Session,
     proxies: Optional[Dict] = None,
     input_dict: Optional[CaseInsensitiveDict] = None,
-) -> Dict:
+) -> tuple[Dict, Dict | None]:
+    latestToken = None
     if input_dict:
 
         if is_oauth(input_dict):
             oauth = YTMusicOAuth(session, proxies)
-            headers = oauth.load_headers(dict(input_dict), input_dict['filepath'])
+            headers, latestToken = oauth.load_headers(dict(input_dict), input_dict['filepath'])
 
         elif is_browser(input_dict):
             headers = input_dict
@@ -45,4 +47,4 @@ def prepare_headers(
     else:  # no authentication
         headers = initialize_headers()
 
-    return headers
+    return headers, latestToken
