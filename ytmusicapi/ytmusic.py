@@ -33,7 +33,8 @@ class YTMusic(BrowsingMixin, SearchMixin, WatchMixin, ExploreMixin, LibraryMixin
                  requests_session=True,
                  proxies: dict = None,
                  language: str = 'en',
-                 location: str = ''):
+                 location: str = '',
+                 useCustomOauth: bool = False):
         """
         Create a new instance to interact with YouTube Music.
 
@@ -72,6 +73,7 @@ class YTMusic(BrowsingMixin, SearchMixin, WatchMixin, ExploreMixin, LibraryMixin
         self.auth = auth
         self.input_dict = None
         self.is_oauth_auth = False
+        self.useCustomOauth = useCustomOauth
 
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -137,7 +139,7 @@ class YTMusic(BrowsingMixin, SearchMixin, WatchMixin, ExploreMixin, LibraryMixin
     def _send_request(self, endpoint: str, body: Dict, additionalParams: str = "") -> Dict:
 
         if self.is_oauth_auth:
-            self.headers, latestToken = prepare_headers(self._session, self.proxies, self.input_dict)
+            self.headers, latestToken = prepare_headers(self._session, self.proxies, self.input_dict, self.useCustomOauth)
             self.input_dict = latestToken or self.input_dict
         body.update(self.context)
         params = YTM_PARAMS
