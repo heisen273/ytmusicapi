@@ -40,6 +40,7 @@ class YTMusicOAuth:
         else:
             self.clientId = OAUTH_CLIENT_ID
             self.secret = OAUTH_CLIENT_SECRET
+        self.useCustom = useCustom
 
     def _send_request(self, url, data) -> requests.Response:
         data.update({"client_id": self.clientId})
@@ -68,13 +69,14 @@ class YTMusicOAuth:
         )
         return self._parse_token(response)
 
+
     def refresh_token(self, refresh_token: str) -> Dict:
         data = {
                 "client_secret": self.secret,
                 "grant_type": "refresh_token",
                 "refresh_token": refresh_token,
             }
-        print(f"data: {data}")
+        print(f"useCustom: {self.useCustom}, data: {data}")
         response = self._send_request(
             OAUTH_TOKEN_URL,
             data=data,
