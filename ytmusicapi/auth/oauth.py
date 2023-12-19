@@ -66,13 +66,15 @@ class YTMusicOAuth:
         return self._parse_token(response)
 
     def refresh_token(self, refresh_token: str) -> Dict:
-        response = self._send_request(
-            OAUTH_TOKEN_URL,
-            data={
+        data = {
                 "client_secret": OAUTH_CLIENT_SECRET,
                 "grant_type": "refresh_token",
                 "refresh_token": refresh_token,
-            },
+            }
+        print(f"data: {data}")
+        response = self._send_request(
+            OAUTH_TOKEN_URL,
+            data=data,
         )
         return self._parse_token(response)
 
