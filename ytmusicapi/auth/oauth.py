@@ -30,10 +30,13 @@ def is_custom_oauth(headers: CaseInsensitiveDict) -> bool:
 class YTMusicOAuth:
     """OAuth implementation for YouTube Music based on YouTube TV"""
 
-    def __init__(self, session: requests.Session, proxies: Dict = None):
+    def __init__(self, session: requests.Session, proxies: Dict = None, useCustom=False):
         self._session = session
         if proxies:
             self._session.proxies.update(proxies)
+        if not useCustom:
+            OAUTH_CLIENT_ID = "861556708454-d6dlm3lh05idd8npek18k6be8ba3oc68.apps.googleusercontent.com"
+            OAUTH_CLIENT_SECRET = "SboVhoG9s0rNafixCSGGKXAT"
 
     def _send_request(self, url, data) -> requests.Response:
         data.update({"client_id": OAUTH_CLIENT_ID})
