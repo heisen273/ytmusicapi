@@ -35,11 +35,14 @@ class YTMusicOAuth:
         if proxies:
             self._session.proxies.update(proxies)
         if not useCustom:
-            OAUTH_CLIENT_ID = "861556708454-d6dlm3lh05idd8npek18k6be8ba3oc68.apps.googleusercontent.com"
-            OAUTH_CLIENT_SECRET = "SboVhoG9s0rNafixCSGGKXAT"
+            self.clientId = "861556708454-d6dlm3lh05idd8npek18k6be8ba3oc68.apps.googleusercontent.com"
+            self.secret = "SboVhoG9s0rNafixCSGGKXAT"
+        else:
+            self.clientId = OAUTH_CLIENT_ID
+            self.secret = OAUTH_CLIENT_SECRET
 
     def _send_request(self, url, data) -> requests.Response:
-        data.update({"client_id": OAUTH_CLIENT_ID})
+        data.update({"client_id": self.clientId})
         headers = {"User-Agent": OAUTH_USER_AGENT}
         return self._session.post(url, data, headers=headers)
 
@@ -58,7 +61,7 @@ class YTMusicOAuth:
         response = self._send_request(
             OAUTH_TOKEN_URL,
             data={
-                "client_secret": OAUTH_CLIENT_SECRET,
+                "client_secret": self.secret,
                 "grant_type": "http://oauth.net/grant_type/device/1.0",
                 "code": device_code,
             },
@@ -67,7 +70,7 @@ class YTMusicOAuth:
 
     def refresh_token(self, refresh_token: str) -> Dict:
         data = {
-                "client_secret": OAUTH_CLIENT_SECRET,
+                "client_secret": self.secret,
                 "grant_type": "refresh_token",
                 "refresh_token": refresh_token,
             }
