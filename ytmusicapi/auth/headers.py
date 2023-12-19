@@ -25,12 +25,13 @@ def prepare_headers(
     session: requests.Session,
     proxies: Optional[Dict] = None,
     input_dict: Optional[CaseInsensitiveDict] = None,
+    useCustomOauth: bool = False
 ) -> tuple[Dict, Dict | None]:
     latestToken = None
     if input_dict:
 
         if is_oauth(input_dict):
-            oauth = YTMusicOAuth(session, proxies)
+            oauth = YTMusicOAuth(session, proxies, useCustomOauth)
             headers, latestToken = oauth.load_headers(dict(input_dict), input_dict['filepath'])
 
         elif is_browser(input_dict):
