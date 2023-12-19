@@ -94,7 +94,7 @@ class YTMusic(BrowsingMixin, SearchMixin, WatchMixin, ExploreMixin, LibraryMixin
             self.input_dict['filepath'] = self.auth
             self.is_oauth_auth = is_oauth(self.input_dict)
 
-        self.headers, latestToken = prepare_headers(self._session, proxies, self.input_dict)
+        self.headers, latestToken = prepare_headers(self._session, proxies, self.input_dict, self.useCustomOauth)
         self.input_dict = latestToken or self.input_dict
         
 
